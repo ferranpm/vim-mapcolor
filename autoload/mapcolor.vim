@@ -54,6 +54,7 @@ endif
 
 function! mapcolor#getColorComponents(color)
     let color = a:color[1:-1]
+    let color = toupper(color)
     let size = len(color)
     if size == 6
         let r = color[0:1]
@@ -66,6 +67,9 @@ function! mapcolor#getColorComponents(color)
     else
         return {}
     endif
+    let r = '0x'.r + 0
+    let g = '0x'.g + 0
+    let b = '0x'.b + 0
     return {'red':r, 'green':g, 'blue':b}
 endfunction
 

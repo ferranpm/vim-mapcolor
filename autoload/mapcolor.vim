@@ -79,7 +79,23 @@ function! mapcolor#printVimColor(color)
         echo 'Not a valid HEX color'
         return
     endif
-    " TODO: find and compare the colors
+    " TODO: find a better and elegant solution
+    let dc = {'red': 255, 'green': 255, 'blue': 255}
+    let fc = {}
+    let ad = 255
+    let fn = 0
+    for pair in items(s:rgb_map)
+        let n = mapcolor#getColorComponents(pair[1])
+        let dr = abs(n.red - c.red)
+        let dg = abs(n.green - c.green)
+        let db = abs(n.blue - c.blue)
+        if dr+dg+db <= ad
+            let ad = dr+dg+db
+            let fc = n
+            let fn = pair[0]
+        endif
+    endfor
+    echo fn
 endfunction
 
 function! mapcolor#printHexColor(color)

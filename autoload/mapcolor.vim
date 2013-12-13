@@ -49,7 +49,6 @@ endif
 
 function! mapcolor#getColorComponents(color)
     let color = a:color[1:-1]
-    let color = toupper(color)
     let size = len(color)
     if size == 6
         let r = color[0:1]

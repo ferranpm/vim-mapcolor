@@ -52,8 +52,30 @@ if !exists('s:rgb_map')
                 \ }
 endif
 
+function! mapcolor#getColorComponents(color)
+    let color = a:color[1:-1]
+    let size = len(color)
+    if size == 6
+        let r = color[0:1]
+        let g = color[2:3]
+        let b = color[4:5]
+    elseif size == 3
+        let r = substitute(color[0], '$', color[0], "")
+        let g = substitute(color[1], '$', color[1], "")
+        let b = substitute(color[2], '$', color[2], "")
+    else
+        return {}
+    endif
+    return {'red':r, 'green':g, 'blue':b}
+endfunction
+
 function! mapcolor#printVimColor(color)
-        let color = a:color[1:-1]
+    let c = mapcolor#getColorComponents(a:color)
+    if len(c) == 0
+        echo 'Not a valid HEX color'
+        return
+    endif
+    " TODO: find and compare the colors
 endfunction
 
 function! mapcolor#printHexColor(color)

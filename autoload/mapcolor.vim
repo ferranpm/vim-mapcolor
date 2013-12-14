@@ -67,12 +67,14 @@ function! mapcolor#getColorComponents(color)
     return {'red':r, 'green':g, 'blue':b}
 endfunction
 
-function! mapcolor#printVimColor(color)
-    let c = mapcolor#getColorComponents(a:color)
-    if len(c) == 0
-        echo 'Not a valid HEX color'
-        return
-    endif
+function! mapcolor#computeColorDiff(rgb1, rgb2)
+        let r = abs(a:rgb1.red - a:rgb2.red)
+        let g = abs(a:rgb1.green - a:rgb2.green)
+        let b = abs(a:rgb1.blue - a:rgb2.blue)
+        return r + g + b
+endfunction
+
+function! mapcolor#findBestFit(c)
     " TODO: find a better and elegant solution
     let dc = {'red': 255, 'green': 255, 'blue': 255}    " diff color
     let ad = 255                                        " actual total diff
@@ -80,16 +82,23 @@ function! mapcolor#printVimColor(color)
     let fn = 0                                          " final number
     for pair in items(s:rgb_map)
         let n = mapcolor#getColorComponents(pair[1])
-        let dr = abs(n.red - c.red)
-        let dg = abs(n.green - c.green)
-        let db = abs(n.blue - c.blue)
-        if dr+dg+db <= ad
-            let ad = dr+dg+db
+        let d = mapcolor#computeColorDiff(a:c, n)
+        if d <= ad
+            let ad = d
             let fc = n
             let fn = pair[0]
         endif
     endfor
-    echo fn
+    return fn
+endfunction
+
+function! mapcolor#printVimColor(color)
+    let c = mapcolor#getColorComponents(a:color)
+    if len(c) == 0
+        echo 'Not a valid HEX color'
+        return
+    endif
+    echo mapcolor#findBestFit(c)
 endfunction
 
 function! mapcolor#printHexColor(color)

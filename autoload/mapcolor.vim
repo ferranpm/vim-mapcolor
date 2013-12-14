@@ -74,10 +74,10 @@ function! mapcolor#printVimColor(color)
         return
     endif
     " TODO: find a better and elegant solution
-    let dc = {'red': 255, 'green': 255, 'blue': 255}
-    let fc = {}
-    let ad = 255
-    let fn = 0
+    let dc = {'red': 255, 'green': 255, 'blue': 255}    " diff color
+    let ad = 255                                        " actual total diff
+    let fc = {}                                         " final color
+    let fn = 0                                          " final number
     for pair in items(s:rgb_map)
         let n = mapcolor#getColorComponents(pair[1])
         let dr = abs(n.red - c.red)
